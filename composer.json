@@ -1,4 +1,6 @@
 {
     "name": "pkale123/hack-nc-state-feb",
-    "require": {}
+    "require": {
+        "mongodb/mongodb": "^1.17"
+    }
 }

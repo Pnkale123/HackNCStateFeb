@@ -1,23 +1,36 @@
 <?php
+require 'vendor/autoload.php';
+
 $searchQuery = isset($_POST['searchQuery']) ? $_POST['searchQuery'] : '';
 
 // File upload handling
 $uploadDir = 'uploads/';
 $uploadedFile = null;
 
+// Check if the syllabusFile key exists in the $_FILES array
 if (isset($_FILES['syllabusFile'])) {
     $uploadedFile = $uploadDir . basename($_FILES['syllabusFile']['name']);
-}
 
-if (move_uploaded_file($_FILES['syllabusFile']['tmp_name'], $uploadedFile)) {
-    echo "File is valid, and was successfully uploaded.\n";
-} else {
-    echo "Upload failed.\n";
-    exit;  
+    // Print details about the uploaded file
+    var_dump($_FILES);
+
+    // Check if the file was successfully moved
+    if (move_uploaded_file($_FILES['syllabusFile']['tmp_name'], $uploadedFile)) {
+        echo "File is valid, and was successfully uploaded.\n";
+    } else {
+        echo "Upload failed.\n";
+        exit;  
+    }
 }
 
 // Connect to MongoDB
-$mongoClient = new MongoDB\Client("mongodb://localhost:27017");
+try {
+    $mongoClient = new MongoDB\Client("mongodb://localhost:27017");
+} catch (MongoDB\Driver\Exception\Exception $e) {
+    echo "Failed to connect to MongoDB: " . $e->getMessage();
+    exit;
+}
+
 $database = 'syllabusReader';
 $collectionName = 'searchQueries';
 
@@ -36,6 +49,6 @@ try {
     $collection->insertOne($document);
     echo "Document inserted successfully";
 } catch (MongoDB\Driver\Exception\Exception $e) {
-    echo "Error: " . $e->getMessage();
+    echo "Error inserting document: " . $e->getMessage();
 }
 ?>
