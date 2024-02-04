@@ -48,7 +48,12 @@ $document = [
 try {
     $collection->insertOne($document);
     echo "Document inserted successfully";
+    
+    // Redirect to success.html using JavaScript
+    echo '<script>window.location.href = "success.html";</script>';
+    exit;
 } catch (MongoDB\Driver\Exception\Exception $e) {
     echo "Error inserting document: " . $e->getMessage();
+    exit;
 }
 ?>
