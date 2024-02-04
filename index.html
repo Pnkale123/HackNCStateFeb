@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <title>Syllabus Reader</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Syllabus Reader</h1>
+        <form action="form.php" method="post" enctype="multipart/form-data">
+            <label for="syllabusFile">Upload Syllabus:</label>
+            <input type="file" id="syllabusFile" name="syllabusFile" accept=".txt, .pdf" required>
+            
+            <label for="searchQuery">Search Query:</label>
+            <input type="text" id="searchQuery" name="searchQuery" required>
+            
+            <input type="submit" value="Search">
+        </form>
+    </div>
+</body>
+</html>
