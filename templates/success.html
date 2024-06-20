@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="refresh" content="5;url=/search">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="templates/style.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Work+Sans&display=swap');
     </style>
@@ -17,5 +18,11 @@
     <div class="footer-bar">
         <p>&copy; 2024 Syllabus Reader | <a style="color:white" href="#">Terms and Conditions</a></p>
     </div>
+
+    <script>
+        setTimeout(function() {
+            window.location.href = '/search';
+        }, 5000); // 5000 milliseconds = 5 seconds
+    </script>
 </body>
 </html>
