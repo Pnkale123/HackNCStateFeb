@@ -3,7 +3,6 @@ from pymongo import MongoClient
 import pdfplumber
 from transformers import pipeline
 import pandas as pd
-import os
 
 app = Flask(__name__)
 client = MongoClient('mongodb://localhost:27017/')
@@ -11,6 +10,10 @@ db = client['syllabusReader']
 collection = db['searchQueries']
 
 qa_pipeline = pipeline('question-answering', model="distilbert-base-uncased-distilled-squad")
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -39,4 +42,17 @@ def search():
 @app.route('/ask', methods=['POST'])
 def ask_question():
     question = request.form['question']
-    pdf_content = collection.find().sor
+    pdf_content = collection.find().sort('timestamp', -1).limit(1)[0]['content']
+    answer = qa_pipeline(question=question, context=pdf_content)
+    return jsonify(answer)
+
+def extract_text_from_pdf(file):
+    with pdfplumber.open(file) as pdf:
+        text = ''
+        for page in pdf.pages:
+            text += page.extract_text()
+    return text
+
+if __name__ == '__main__':
+    print("Starting Flask server on http://localhost:8000")
+    app.run(debug=True, port=8000)
